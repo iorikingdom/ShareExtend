@@ -55,12 +55,10 @@ class _MyAppState extends State<MyApp> {
                   onPressed: () async {
                     final res =
                         await _picker.getImage(source: ImageSource.gallery);
-                    if (res.path != null) {
-                      ShareExtend.share(res.path, "image",
-                          sharePanelTitle: "share image title",
-                          subject: "share image subject");
-                    }
-                  },
+                    ShareExtend.share(res!.path, "image",
+                        sharePanelTitle: "share image title",
+                        subject: "share image subject");
+                                    },
                   child: Text("share image"),
                 ),
                 ElevatedButton(
@@ -71,10 +69,8 @@ class _MyAppState extends State<MyApp> {
                   onPressed: () async {
                     final res =
                         await _picker.getVideo(source: ImageSource.gallery);
-                    if (res.path != null) {
-                      ShareExtend.share(res.path, "video");
-                    }
-                  },
+                    ShareExtend.share(res!.path, "video");
+                                    },
                   child: Text("share video"),
                 ),
                 ElevatedButton(
@@ -118,11 +114,11 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<String> _writeByteToImageFile(ByteData byteData) async {
-    Directory dir = Platform.isAndroid
+    Directory? dir = Platform.isAndroid
         ? await getExternalStorageDirectory()
         : await getApplicationDocumentsDirectory();
     File imageFile = new File(
-        "${dir.path}/flutter/${DateTime.now().millisecondsSinceEpoch}.png");
+        "${dir?.path}/flutter/${DateTime.now().millisecondsSinceEpoch}.png");
     imageFile.createSync(recursive: true);
     imageFile.writeAsBytesSync(byteData.buffer.asUint8List(0));
     return imageFile.path;
@@ -130,10 +126,10 @@ class _MyAppState extends State<MyApp> {
 
   ///share the storage file
   _shareStorageFile() async {
-    Directory dir = Platform.isAndroid
+    Directory? dir = Platform.isAndroid
         ? await getExternalStorageDirectory()
         : await getApplicationDocumentsDirectory();
-    File testFile = File("${dir.path}/flutter/test.txt");
+    File testFile = File("${dir?.path}/flutter/test.txt");
     if (!await testFile.exists()) {
       await testFile.create(recursive: true);
       testFile.writeAsStringSync("test for share documents file");
